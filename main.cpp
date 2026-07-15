@@ -18,7 +18,7 @@ namespace arial_ttf
     extern unsigned char data[];
 }
 
-// Parametros por defecto (el profesor los cambio)
+// Parametros por defecto
 double x_min = -2; 
 double x_max = 1;  
 double y_min = -1.5; 
