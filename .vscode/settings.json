@@ -1,0 +1,31 @@
+{
+    // Define el "generador": Ninja es el programa que coordina la compilación rápida.
+    // "Multi-Config" permite cambiar entre modo Debug (para errores) y Release (velocidad) fácilmente.
+    "cmake.generator": "Ninja Multi-Config",
+
+    // Define dónde se guardarán los archivos creados. 
+    // ${workspaceFolder} es la carpeta de tu proyecto; los archivos compilados irán a una subcarpeta llamada /build.
+    //para tareas examenes - esto no se sube (ocupa mucho espacio)
+    "cmake.buildDirectory": "${workspaceFolder}/build",
+
+    // Aquí empiezan los ajustes específicos para que CMake encuentre tus herramientas:
+    "cmake.configureSettings": {
+        
+        // Indica dónde está el compilador para el lenguaje C (el "traductor" de C).
+        "CMAKE_C_COMPILER": "c:/tools/mingw64/bin/gcc.exe",
+
+        // Indica dónde está el compilador para C++ (el que usarás para tus archivos .cpp).
+        "CMAKE_CXX_COMPILER": "c:/tools/mingw64/bin/g++.exe",
+
+        // Indica dónde está el programa Ninja que descargaste para gestionar la construcción.
+        "CMAKE_MAKE_PROGRAM": "c:/tools/mingw64/bin/ninja.exe",
+
+        // EL MÁS IMPORTANTE: Conecta CMake con vcpkg. 
+        // Este archivo (.cmake) le enseña a tu proyecto cómo buscar librerías como SFML o fmt en vcpkg.
+        "CMAKE_TOOLCHAIN_FILE": "c:/tools/vcpkg-2026.03.18/scripts/buildsystems/vcpkg.cmake",
+
+        // Especifica el "sabor" de las librerías: 
+        // 64 bits (x64), para el compilador MinGW y que funcionen como archivos dinámicos (.dll).
+        "VCPKG_TARGET_TRIPLET": "x64-mingw-dynamic"
+    }
+}
