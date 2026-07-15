@@ -5,7 +5,7 @@
 #include <fmt/core.h>
 #include <cstring> // Para memset
 #include <SFML/Graphics.hpp>
-#include "fractal_mpi.h"
+#include "fractal_burning_mpi.h"
 #include "draw_text.h"
 
 #ifdef _WIN32

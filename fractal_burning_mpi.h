@@ -1,7 +1,7 @@
 
-#ifndef FRACTAL_MPI_H 
+#ifndef FRACTAL_BURNING_MPI_H 
 
-#define FRACTAL_MPI_H 
+#define FRACTAL_BURNING_MPI_H 
 
 #include <cstdint> 
 

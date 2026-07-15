@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(ejemplo-mpi)
+project(correcion-mpi)
 
 # 1. Definir variables PRIMERO (para que estén disponibles)
 set(MPT_ROOT "C:/oneAPI/mpi/latest") #ruta base
@@ -13,9 +13,15 @@ find_package(Freetype CONFIG REQUIRED)
 include_directories(${MPI_INCLUDE})
 
 # 3. Definir los ejecutables
-add_executable(fractal_mpi 
-main.cpp 
-fractal_mpi.cpp 
+add_executable(burning_mpi 
+main_burning.cpp 
+fractal_burning_mpi.cpp 
+palette.cpp 
+draw_text.cpp)
+
+add_executable(newton_mpi 
+main_newton.cpp 
+fractal_newton_mpi.cpp 
 palette.cpp 
 draw_text.cpp)
 
@@ -27,5 +33,6 @@ find_package(fmt CONFIG REQUIRED)
 # 5. Enlazar las librerías a cada ejecutable
 #impi.lib intel mpi (arhivo con todo el codigo binario de la implementacion MPI de intel)
 #target_link_libraries(ejemplo-mpi PRIVATE fmt::fmt ${MPI_LIB}/impi.lib) 
-target_link_libraries(fractal_mpi PRIVATE fmt::fmt ${MPI_LIB}/impi.lib SFML::System SFML::Graphics SFML::Window Freetype::Freetype) 
+target_link_libraries(burning_mpi  PRIVATE fmt::fmt ${MPI_LIB}/impi.lib SFML::System SFML::Graphics SFML::Window Freetype::Freetype) 
+target_link_libraries(newton_mpi  PRIVATE fmt::fmt ${MPI_LIB}/impi.lib SFML::System SFML::Graphics SFML::Window Freetype::Freetype) 
 

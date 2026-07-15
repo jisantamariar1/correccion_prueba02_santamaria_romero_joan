@@ -1,4 +1,4 @@
-#include "fractal_mpi.h" 
+#include "fractal_burning_mpi.h" 
 #include <complex>          
 #include "palette.h" 
 #include <cmath> //para el std::abs      
