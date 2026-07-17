@@ -175,6 +175,7 @@ void setup_ui(){
 int main(int argc, char* argv[]) {
     MPI_Init(&argc, &argv);
 
+    
     MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     
@@ -199,7 +200,10 @@ int main(int argc, char* argv[]) {
         while(true){
             int meta_int[2];
             double meta_double[4];
-            
+
+            // debido a que la interfaz grafica separa el camino de ejecucion del Rank 0 del de los esclavos
+            // es obligatorio invocar las operaciones colectivas (Bcast y Reduce) en ambas ramas para que todos los procesos sincronicen 
+            //y transmitan datos cuadro a cuadro sin bloquearse.
             MPI_Bcast(meta_int, 2, MPI_INT, 0, MPI_COMM_WORLD);
             MPI_Bcast(meta_double, 4, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
@@ -213,11 +217,11 @@ int main(int argc, char* argv[]) {
             if(running == 0) {
                 break;
             }
-            
+            // Acumulador de 64 bits para evitar desbordamientos de enteros al sumar las iteraciones locales
             long long local_iters = 0;
             double local_time = 0.0;
             int mis_filas = row_end - row_start;
-            
+            // ejecucion del fractal
             newton_mpi(x_min, y_min, x_max, y_max, WIDTH, HEIGHT, row_start, row_end, pixel_buffer, max_iteraciones, local_iters, local_time);
             dibujar_texto(rank, mis_filas);
             

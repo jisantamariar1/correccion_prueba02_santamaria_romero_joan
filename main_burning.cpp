@@ -95,7 +95,7 @@ void setup_ui(){
 
     while (window.isOpen())
     {
-        // A. PROCESAR EVENTOS: Entrada del usuario.
+        // procesar eventos
         while (const std::optional event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>()){
                 running = 0;
@@ -168,11 +168,11 @@ void setup_ui(){
             }
         }
 
-        // Actualizar la textura
+        // actualizar la textura
         texture.update((const uint8_t *)texture_buffer);
         frames++;
 
-        // D. CÁLCULO DE FPS: Cada vez que pase 1 segundo, actualizamos el contador.
+        // calculo de fps
         if (clock.getElapsedTime().asSeconds() >= 1.0f){
             fps = frames;
             frames = 0;
@@ -189,7 +189,7 @@ void setup_ui(){
         );
         text.setString(msg);
 
-        // F. RENDERIZADO:
+        // renderizado
         window.clear();      // Limpiar la pantalla (borrar el frame anterior).
         window.draw(sprite); // Dibujar el fractal (la textura).
         window.draw(text);   // Dibujar el contador de FPS encima.
@@ -203,7 +203,7 @@ void setup_ui(){
 int main(int argc, char* argv[]) {
     MPI_Init(&argc, &argv);
 
-    // SOLUCIONADO: Se eliminó la redefinición local. Ahora se asignan las variables globales.
+    
     MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     
@@ -231,6 +231,10 @@ int main(int argc, char* argv[]) {
             int meta_int[2];
             double meta_double[4];
             
+            // debido a que la interfaz grafica separa el camino de ejecucion del Rank 0 del de los esclavos
+            // es obligatorio invocar las operaciones colectivas (Bcast y Reduce) en ambas ramas para que todos los procesos sincronicen 
+            //y transmitan datos cuadro a cuadro sin bloquearse.
+            
             MPI_Bcast(meta_int, 2, MPI_INT, 0, MPI_COMM_WORLD);
             MPI_Bcast(meta_double, 4, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
@@ -248,20 +252,20 @@ int main(int argc, char* argv[]) {
             // Limpiar histograma local antes de iterar
             for(int k=0; k<16; k++) local_hist[k] = 0;
             
-            // 2. CALCULAR FRACTAL Y HISTOGRAMA
+            // calcular fractal e histograma
             int mis_filas = row_end - row_start;
             burning_mpi(x_min, y_min, x_max, y_max, WIDTH, HEIGHT, row_start, row_end, pixel_buffer, local_hist, max_iteraciones);
             dibujar_texto(rank, mis_filas);
             
-            // 3. ENVIAR LA PORCIÓN EXACTA (Solución al Deadlock)
+            // enviar porcion 
             MPI_Send(pixel_buffer, WIDTH * mis_filas, MPI_UNSIGNED, 0, 0, MPI_COMM_WORLD);
 
-            // 4. ENVIAR HISTOGRAMA LOCAL AL MAESTRO (MPI_Gather)
+            // enviar histograma local al maestro
             MPI_Gather(local_hist, 16, MPI_INT, nullptr, 0, MPI_INT, 0, MPI_COMM_WORLD);
         }
     }
 
-    // SOLUCIONADO: Liberación centralizada y segura para todos los ranks.
+    // liberación centralizada y segura para todos los ranks.
     delete[] pixel_buffer;
     MPI_Finalize();
     return 0;

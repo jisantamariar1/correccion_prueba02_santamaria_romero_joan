@@ -12,7 +12,7 @@ find_package(Freetype CONFIG REQUIRED)
 # 2. Configurar directorios (ahora sí conoce MPI_INCLUDE)
 include_directories(${MPI_INCLUDE})
 
-# 3. Definir los ejecutables
+# 3. Definir los ejecutables (CMake: Select Launch Target.)
 add_executable(burning_mpi 
 main_burning.cpp 
 fractal_burning_mpi.cpp 
